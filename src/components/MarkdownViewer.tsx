@@ -22,17 +22,9 @@ export default function MarkdownViewer({ selectedFile }: MarkdownViewerProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied'>('idle');
 
-  useEffect(() => {
-    if (!selectedFile) {
-      setContent('');
-      setMetadata({});
-      return;
-    }
-
-    fetchContent();
-  }, [selectedFile]);
-
-  const fetchContent = async () => {
+  const fetchContent = React.useCallback(async () => {
+    if (!selectedFile) return;
+    
     try {
       setIsLoading(true);
       const response = await fetch(`/api/content?filename=${selectedFile}`);
@@ -59,7 +51,17 @@ export default function MarkdownViewer({ selectedFile }: MarkdownViewerProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [selectedFile]);
+
+  useEffect(() => {
+    if (!selectedFile) {
+      setContent('');
+      setMetadata({});
+      return;
+    }
+
+    fetchContent();
+  }, [selectedFile, fetchContent]);
 
   const handleCopy = async () => {
     try {

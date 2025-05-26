@@ -4,7 +4,7 @@ import path from 'path';
 import { execSync } from 'child_process';
 
 // 로깅 유틸리티 함수
-function log(message: string, data?: any) {
+function log(message: string, data?: unknown) {
   console.log(`[Subtitles API] ${message}`, data ? JSON.stringify(data, null, 2) : '');
 }
 
@@ -206,7 +206,7 @@ export async function GET(request: Request) {
       log('File read successfully');
       
       // Parse metadata and content
-      const [_, metadataStr, ...contentParts] = fileContent.split('---\n');
+      const [, metadataStr, ...contentParts] = fileContent.split('---\n');
       const metadata = JSON.parse(metadataStr);
       const content = contentParts.join('---\n').trim();
       

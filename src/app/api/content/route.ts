@@ -15,7 +15,7 @@ const turndownService = new TurndownService({
 });
 
 // 로깅 유틸리티 함수
-function log(message: string, data?: any) {
+function log(message: string, data?: unknown) {
   console.log(`[Content API] ${message}`, data ? JSON.stringify(data, null, 2) : '');
 }
 
@@ -32,7 +32,7 @@ function cleanHtml($: cheerio.CheerioAPI) {
 }
 
 // 메인 콘텐츠 영역 찾기
-function findMainContent($: cheerio.CheerioAPI): cheerio.Cheerio<cheerio.AnyNode> {
+function findMainContent($: cheerio.CheerioAPI): cheerio.Cheerio<any> {
   log('Finding main content area...');
   // 일반적인 메인 콘텐츠 선택자들
   const contentSelectors = [
@@ -93,7 +93,7 @@ export async function GET(request: Request) {
       }
       
       // 레거시 형식 처리 (이전 YouTube 자막 파일)
-      const title = filename.split('_')[0].replace(/-/g, ' ');
+      const title = filename.replace(/\..*$/, '').replace(/-/g, ' ');
       return NextResponse.json({
         content: fileContent,
         title,

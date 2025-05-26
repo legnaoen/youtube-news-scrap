@@ -24,11 +24,7 @@ export default function HistoryList({ selectedFile, onSelectFile, refreshKey }: 
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    fetchHistory();
-  }, [refreshKey]);
-
-  const fetchHistory = async () => {
+  const fetchHistory = React.useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await fetch('/api/history');
@@ -73,7 +69,11 @@ export default function HistoryList({ selectedFile, onSelectFile, refreshKey }: 
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchHistory();
+  }, [fetchHistory, refreshKey]);
 
   const handleDelete = async (filename: string) => {
     if (!confirm('이 항목을 삭제하시겠습니까?')) return;
