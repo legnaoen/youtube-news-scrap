@@ -32,7 +32,7 @@ function cleanHtml($: cheerio.CheerioAPI) {
 }
 
 // 메인 콘텐츠 영역 찾기
-function findMainContent($: cheerio.CheerioAPI): cheerio.Cheerio<cheerio.Element> {
+function findMainContent($: cheerio.CheerioAPI): cheerio.Cheerio<cheerio.AnyNode> {
   log('Finding main content area...');
   // 일반적인 메인 콘텐츠 선택자들
   const contentSelectors = [
