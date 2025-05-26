@@ -20,7 +20,7 @@ function log(message: string, data?: unknown) {
 }
 
 // HTML 정리 및 불필요한 요소 제거
-function cleanHtml($: cheerio.CheerioAPI) {
+function cleanHtml($: ReturnType<typeof cheerio.load>) {
   log('Cleaning HTML content...');
   // 불필요한 요소 제거
   $('script, style, iframe, nav, footer, header, aside').remove();
@@ -32,7 +32,7 @@ function cleanHtml($: cheerio.CheerioAPI) {
 }
 
 // 메인 콘텐츠 영역 찾기
-function findMainContent($: cheerio.CheerioAPI): cheerio.Cheerio<any> {
+function findMainContent($: ReturnType<typeof cheerio.load>) {
   log('Finding main content area...');
   // 일반적인 메인 콘텐츠 선택자들
   const contentSelectors = [
@@ -79,7 +79,7 @@ export async function GET(request: Request) {
       // 파일 내용이 메타데이터 형식인지 확인
       if (fileContent.startsWith('---\n')) {
         // 메타데이터 형식 파싱
-        const [_, metadataStr, ...contentParts] = fileContent.split('---\n');
+        const [, metadataStr, ...contentParts] = fileContent.split('---\n');
         try {
           const metadata = JSON.parse(metadataStr);
           const content = contentParts.join('---\n').trim();
@@ -87,7 +87,7 @@ export async function GET(request: Request) {
             content,
             ...metadata
           });
-        } catch (error) {
+        } catch {
           log('Error parsing metadata, falling back to legacy format');
         }
       }

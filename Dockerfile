@@ -13,7 +13,8 @@ WORKDIR /app
 
 # 의존성 설치를 위한 파일만 먼저 복사 (캐시 활용)
 COPY package*.json ./
-RUN npm ci
+RUN npm ci && \
+    npm install --save-dev @types/node @types/cheerio @types/turndown
 
 # 소스 코드 복사 및 빌드
 COPY . .
